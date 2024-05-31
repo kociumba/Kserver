@@ -5,7 +5,11 @@ version: '3'
 tasks:
   build:
     cmds:
+    - go get -C . -d ./...
+    - go mod tidy
     - go build -C . -o ./bin
   build-r:
     cmds:
+    - go get -C . -d ./...
+    - go mod tidy
     - go build -C . -o ./bin -ldflags "-s -w"

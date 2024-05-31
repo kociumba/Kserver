@@ -17,7 +17,10 @@ func main() {
 		go handlers.RegisterRoutes(route)
 	}
 
-	go http.ListenAndServe(":8080", nil)
+	port := ":" + fmt.Sprint(cfg.Port)
+	fmt.Println("Listening on " + port)
+
+	go http.ListenAndServe(port, nil)
 
 	runREPL()
 }

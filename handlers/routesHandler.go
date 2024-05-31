@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -12,7 +11,7 @@ func RegisterRoutes(route Route) {
 	http.HandleFunc(route.Route, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", route.ContentType)
 
-		fmt.Println(r.Method, r.URL)
+		// fmt.Println(r.Method, r.URL)
 
 		f, err := os.OpenFile(route.Content, os.O_RDONLY, os.ModePerm)
 		if err != nil {
