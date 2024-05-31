@@ -1,0 +1,41 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Schema for Kserver configuration",
+    "type": "object",
+    "properties": {
+        "port": {
+            "type": "integer",
+            "description": "The port number",
+            "default": 8080
+        },
+        "handlers": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "route": {
+                        "type": "string",
+                        "description": "The route path"
+                    },
+                    "content": {
+                        "type": "string",
+                        "description": "The content to be served"
+                    },
+                    "contentType": {
+                        "type": "string",
+                        "description": "The MIME type of the content"
+                    }
+                },
+                "required": [
+                    "route",
+                    "content",
+                    "contentType"
+                ]
+            }
+        }
+    },
+    "required": [
+        "port",
+        "handlers"
+    ]
+}
