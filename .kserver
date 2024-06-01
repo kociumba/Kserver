@@ -8,6 +8,16 @@
             "description": "The port number",
             "default": 8080
         },
+        "cert": {
+            "type": "string",
+            "description": "The path to the TLS certificate file",
+            "default": ""
+        },
+        "key": {
+            "type": "string",
+            "description": "The path to the TLS key file",
+            "default": ""
+        },
         "handlers": {
             "type": "array",
             "items": {
@@ -19,7 +29,7 @@
                     },
                     "content": {
                         "type": "string",
-                        "description": "The content to be served"
+                        "description": "The file containing the content to be served"
                     },
                     "contentType": {
                         "type": "string",

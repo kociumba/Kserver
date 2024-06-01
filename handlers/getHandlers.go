@@ -8,7 +8,9 @@ import (
 )
 
 type Handlers struct {
-	Port     int     `yaml:"port" env-default:"8080"`
+	Port     int     `yaml:"port" env:"PORT" env-default:"8080"`
+	Cert     string  `yaml:"cert" env:"CERT" env-default:""`
+	Key      string  `yaml:"key"  env:"KEY" env-default:""`
 	Handlers []Route `yaml:"handlers"`
 }
 
@@ -33,14 +35,8 @@ func GetHandlers() (Handlers, error) {
 	} else {
 		InitConfig()
 	}
-	err = cleanenv.ReadConfig("kserver.json", &Cfg)
-	if err == nil {
-		return Cfg, nil
-	} else {
-		InitConfig()
-	}
 
-	return Handlers{}, fmt.Errorf("unable to read handlers from config files")
+	return Handlers{}, fmt.Errorf("unable to find or read config file")
 }
 
 func InitConfig() {
@@ -48,6 +44,7 @@ func InitConfig() {
 	if err != nil {
 		panic(err)
 	}
+	defer f.Close()
 
 	f.Write([]byte(defCfg))
 
