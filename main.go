@@ -5,10 +5,14 @@ import (
 	"Kserver/internal"
 	"fmt"
 	"net/http"
+	"os"
+	"time"
+
+	"github.com/charmbracelet/log"
 )
 
 func main() {
-	// I have to do it like this couse otherwise HelpMsg can't initialize
+	// I have to do it like this couse otherwise HelpMsg can't initialize before using it
 	internal.Commands["help"] = internal.Command{
 		Name:        "help",
 		NameANSI:    "\033[33mhelp\033[0m",
@@ -16,6 +20,19 @@ func main() {
 		Callback: func() {
 			fmt.Println(internal.HelpMsg)
 		},
+	}
+
+	var logFile, err = os.Create("KserverLOG.txt")
+
+	log.SetOutput(logFile)
+
+	var srv = &http.Server{
+		Handler:           nil,
+		ReadTimeout:       15 * time.Second,
+		ReadHeaderTimeout: 15 * time.Second,
+		WriteTimeout:      10 * time.Second,
+		IdleTimeout:       30 * time.Second,
+		ErrorLog:          log.Default().StandardLog(),
 	}
 
 	cfg, err := handlers.GetHandlers()
@@ -33,14 +50,18 @@ func main() {
 	if cfg.Cert != "" && cfg.Key != "" {
 		// do it with an anonymous func to still catch the error if any
 		go func() {
-			err := http.ListenAndServeTLS(port, cfg.Cert, cfg.Key, nil)
+			fmt.Println("Starting with TLS")
+			srv.Addr = port
+			err := srv.ListenAndServeTLS(cfg.Cert, cfg.Key)
 			if err != nil {
 				panic(err)
 			}
 		}()
 	} else {
+		fmt.Println("TLS not provided starting locally")
 		go func() {
-			err := http.ListenAndServe(port, nil)
+			srv.Addr = port
+			err := srv.ListenAndServe()
 			if err != nil {
 				panic(err)
 			}
