@@ -8,7 +8,7 @@ import (
 )
 
 type Handlers struct {
-	Port     int     `yaml:"port"`
+	Port     int     `yaml:"port" env-default:"8080"`
 	Handlers []Route `yaml:"handlers"`
 }
 
@@ -19,18 +19,6 @@ type Route struct {
 }
 
 var Cfg Handlers
-
-const defCfg = `
-# yaml-language-server: $schema=https://raw.githubusercontent.com/kociumba/kserver/main/.kserver
-
-port: 8080
-
-handlers:
-- route: /
-  content: ./index.html
-  contentType: text/html
-
-`
 
 func GetHandlers() (Handlers, error) {
 	err := cleanenv.ReadConfig("kserver.yml", &Cfg)
