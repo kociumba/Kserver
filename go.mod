@@ -5,6 +5,7 @@ go 1.22.1
 require (
 	github.com/charmbracelet/log v0.4.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
+	github.com/yuin/gopher-lua v1.1.1
 )
 
 require (
@@ -19,7 +20,6 @@ require (
 	github.com/muesli/reflow v0.3.0 // indirect
 	github.com/muesli/termenv v0.15.2 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
-	github.com/yuin/gopher-lua v1.1.1 // indirect
 	golang.org/x/exp v0.0.0-20231006140011-7918f672742d // indirect
 	golang.org/x/sys v0.13.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
