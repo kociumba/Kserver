@@ -3,6 +3,7 @@ package main
 import (
 	"Kserver/handlers"
 	"Kserver/internal"
+	"flag"
 	"fmt"
 	"net/http"
 	"os"
@@ -12,7 +13,15 @@ import (
 	lua "github.com/yuin/gopher-lua"
 )
 
+var (
+	port   = flag.Int("port", 8000, "port to listen on")
+	useLua = flag.Bool("lua", false, "run with lua")
+)
+
 func main() {
+
+	flag.Parse()
+
 	// I have to do it like this couse otherwise HelpMsg can't initialize before using it
 	internal.Commands["help"] = internal.Command{
 		Name:        "help",
@@ -36,7 +45,13 @@ func main() {
 		ErrorLog:          log.Default().StandardLog(),
 	}
 
-	if len(os.Args) > 1 && os.Args[1] == "-lua" {
+	cfg, err := handlers.GetHandlers()
+	if err != nil {
+		// panic(err)
+		cfg.Port = *port
+	}
+
+	if *useLua {
 		l := lua.NewState(lua.Options{MinimizeStackMemory: true})
 		defer l.Close()
 		registerRouteType(l)
@@ -45,12 +60,6 @@ func main() {
 		if err := l.DoString("assert(loadfile(kserver_lua_file))()"); err != nil {
 			panic(err)
 		}
-	}
-
-	cfg, err := handlers.GetHandlers()
-	if err != nil {
-		// panic(err)
-		cfg.Port = 8000
 	}
 
 	// if os.Args[1] != "-lua" || len(os.Args) < 2 {
@@ -190,7 +199,8 @@ func routeGetSetContentType(L *lua.LState) int {
 
 func luaRegisterRoutes(L *lua.LState) int {
 	route := checkRoute(L)
-	fmt.Printf("luaRegisterRoutes called with route: %+v\n", route)
+	fmt.Printf("Registering route: \033[34m%+v\033[0m from lua\n", route.Route)
 	handlers.RegisterRoutes(*route)
-	return 0 // No failure condition, always returns success
+	L.Push(lua.LBool(true)) // Return true to indicate success
+	return 1                // Number of return values
 }
