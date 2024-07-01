@@ -45,9 +45,12 @@ func main() {
 		ErrorLog:          log.Default().StandardLog(),
 	}
 
-	cfg, err := handlers.GetHandlers()
+	cfg, err := handlers.GetHandlers(*useLua)
 	if err != nil {
-		// panic(err)
+		panic(err)
+	}
+
+	if *port == 8000 {
 		cfg.Port = *port
 	}
 

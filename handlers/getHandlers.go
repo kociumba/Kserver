@@ -22,19 +22,26 @@ type Route struct {
 
 var Cfg Handlers
 
-func GetHandlers() (Handlers, error) {
+func GetHandlers(lua bool) (Handlers, error) {
 	err := cleanenv.ReadConfig("kserver.yml", &Cfg)
 	if err == nil {
 		return Cfg, nil
 	} else {
-		// InitConfig()
-		fmt.Println("Running no config assuming\033[32m -lua \033[0m")
+		if lua {
+			InitConfig()
+		} else {
+			fmt.Println("Running with lua config")
+		}
 	}
 	err = cleanenv.ReadConfig("kserver.yaml", &Cfg)
 	if err == nil {
 		return Cfg, nil
 	} else {
-		// InitConfig()
+		if lua {
+			InitConfig()
+		} else {
+			fmt.Println("Running with lua config")
+		}
 	}
 
 	return Handlers{}, fmt.Errorf("unable to find or read config file")
