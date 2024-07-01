@@ -7,7 +7,7 @@ A proof of concept server that can be configured with YAML ⚙️ or LUA 🌕
 For YAML create a `kserver.yml` file in the directory you want to serve, 
 the file should look like this:
 
-```yaml
+```yaml copy
 # yaml-language-server: $schema=https://raw.githubusercontent.com/kociumba/kserver/main/.kserver
 
 port: 8080
@@ -19,17 +19,18 @@ handlers:
 # Add more routes here, in VSCode you can use ctrl+space to autocomplete the array
 ```
 
->[!NOTICE]
+>[!NOTE]
 > There is a YAML schema availible if you include the top comment, which allows for autocomplete in VSCode.
 
-**To use lua configuration, pass the `-lua` flag to `kserver`**
-
-*There is no way to set the port in lua so you can use `-port *number*` to configure it or use the default `8000`*
+> [!TIP]
+>**To use lua configuration, pass the `-lua` flag to `kserver`**
+>
+>*There is no way to set the port in lua so you can use `-port *number*` to configure it or use the default `8000`*
 
 For LUA create a `kserver.lua` file in the directory you want to serve,
 the file should look like this:
 
-```lua
+```lua copy
 local routes = {
     {route = "/home", content = "ksuite.html", contentType = "text/html"},
     {route = "/", content = "home.html", contentType = "text/html"},
@@ -55,8 +56,8 @@ for i, r in ipairs(routes) do
 end
 ```
 
->[!NOTICE]
-> This lua code supports multiple routes and can be greatly simplified if you only intend on serrving one route.
+>[!NOTE]
+> This lua code supports multiple routes and can be greatly simplified if you only intend on serrving one route :trollface: .
 
 ## Planned features
 
