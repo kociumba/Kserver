@@ -27,13 +27,14 @@ func GetHandlers() (Handlers, error) {
 	if err == nil {
 		return Cfg, nil
 	} else {
-		InitConfig()
+		// InitConfig()
+		fmt.Println("Running no config assuming\033[32m -lua \033[0m")
 	}
 	err = cleanenv.ReadConfig("kserver.yaml", &Cfg)
 	if err == nil {
 		return Cfg, nil
 	} else {
-		InitConfig()
+		// InitConfig()
 	}
 
 	return Handlers{}, fmt.Errorf("unable to find or read config file")
