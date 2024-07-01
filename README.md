@@ -57,8 +57,8 @@ end
 ```
 
 >[!NOTE]
-> This lua code supports multiple routes and can be greatly simplified if you only intend on serrving one route :trollface: .
+> This lua code supports multiple routes and can be greatly simplified if you only intend on serrving one route.
 
 ## Planned features
 
-- Support for custom endpoint logic with the lua configuration
+- Support for custom endpoint logic with the lua configuration :trollface:
