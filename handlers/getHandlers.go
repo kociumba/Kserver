@@ -23,11 +23,16 @@ type Route struct {
 var Cfg Handlers
 
 func GetHandlers(lua bool) (Handlers, error) {
+	if lua {
+		fmt.Println("Running with lua config")
+		return Cfg, nil
+	}
+
 	err := cleanenv.ReadConfig("kserver.yml", &Cfg)
 	if err == nil {
 		return Cfg, nil
 	} else {
-		if lua {
+		if !lua {
 			InitConfig()
 		} else {
 			fmt.Println("Running with lua config")
@@ -37,7 +42,7 @@ func GetHandlers(lua bool) (Handlers, error) {
 	if err == nil {
 		return Cfg, nil
 	} else {
-		if lua {
+		if !lua {
 			InitConfig()
 		} else {
 			fmt.Println("Running with lua config")

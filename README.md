@@ -25,7 +25,7 @@ handlers:
 > [!TIP]
 >**To use lua configuration, pass the `-lua` flag to `kserver`**
 >
->*There is no way to set the port in lua so you can use `-port NUMBER` to configure it or use the default `8000`*
+>*There is no way to set the port in lua so you can use `-port INT` to configure it or use the default `8000`*
 
 For LUA create a `kserver.lua` file in the directory you want to serve,
 the file should look like this:

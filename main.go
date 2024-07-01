@@ -14,8 +14,8 @@ import (
 )
 
 var (
-	port   = flag.Int("port", 8000, "port to listen on")
-	useLua = flag.Bool("lua", false, "run with lua")
+	port   = flag.Int("port", 0, "port to listen on")
+	useLua = flag.Bool("lua", false, "run with lua configuration")
 )
 
 func main() {
@@ -50,10 +50,6 @@ func main() {
 		panic(err)
 	}
 
-	if *port == 8000 {
-		cfg.Port = *port
-	}
-
 	if *useLua {
 		l := lua.NewState(lua.Options{MinimizeStackMemory: true})
 		defer l.Close()
@@ -67,9 +63,14 @@ func main() {
 
 	// if os.Args[1] != "-lua" || len(os.Args) < 2 {
 	for _, route := range cfg.Handlers {
+		fmt.Printf("Registering route: \033[34m%+v\033[0m from YAML\n", route.Route)
 		go handlers.RegisterRoutes(route)
 	}
 	// }
+
+	if *port != 0 {
+		cfg.Port = *port
+	}
 
 	port := ":" + fmt.Sprint(cfg.Port)
 	fmt.Println("Server starting on port " + port)
@@ -202,7 +203,7 @@ func routeGetSetContentType(L *lua.LState) int {
 
 func luaRegisterRoutes(L *lua.LState) int {
 	route := checkRoute(L)
-	fmt.Printf("Registering route: \033[34m%+v\033[0m from lua\n", route.Route)
+	fmt.Printf("Registering route: \033[34m%+v\033[0m from LUA\n", route.Route)
 	handlers.RegisterRoutes(*route)
 	L.Push(lua.LBool(true)) // Return true to indicate success
 	return 1                // Number of return values
