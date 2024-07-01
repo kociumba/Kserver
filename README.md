@@ -32,9 +32,7 @@ the file should look like this:
 
 ```lua copy
 local routes = {
-    {route = "/home", content = "ksuite.html", contentType = "text/html"},
-    {route = "/", content = "home.html", contentType = "text/html"},
-    {route = "/json", content = ".kserver", contentType = "application/json"},
+    {route = "/", content = "./index.html", contentType = "text/html"},
     -- Add more routes here
 }
 
