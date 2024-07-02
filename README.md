@@ -55,7 +55,7 @@ end
 ```
 
 >[!NOTE]
-> This lua code supports multiple routes and can be greatly simplified if you only intend on serrving one route.
+> This lua code supports multiple routes and can be greatly simplified if you only intend on serving one route.
 
 ## Planned features
 
