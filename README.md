@@ -42,7 +42,7 @@ Register_routes(routes)
 
 If you need custom logic before registering you can add it before the call to Register_routes(routes) or replace it with this:
 
-```lua
+```lua copy
 
 for i, r in ipairs(routes) do
     local route = route.new(r.route, r.content, r.contentType, r.handler)
