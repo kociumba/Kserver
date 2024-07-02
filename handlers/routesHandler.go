@@ -4,27 +4,44 @@ import (
 	"io"
 	"net/http"
 	"os"
+
+	lua "github.com/yuin/gopher-lua"
 )
 
 func RegisterRoutes(route Route) {
-	// fmt.Printf("FROM REGISTERROUTES Registering route: %+v\n", route) // Log the route being registered
+	// fmt.Println(route)
 	http.HandleFunc(route.Route, func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", route.ContentType)
+		if route.ContentType == "application/json" && route.LuaFunc != nil {
+			state := lua.NewState()
+			defer state.Close()
+			state.SetGlobal("request", lua.LString(r.Method))
+			state.SetGlobal("url", lua.LString(r.URL.String()))
+			if err := state.CallByParam(lua.P{
+				Fn:      route.LuaFunc,
+				NRet:    1,
+				Protect: true,
+			}); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			ret := state.Get(-1)
+			state.Pop(1)
+			w.Header().Set("Content-Type", route.ContentType)
+			w.Write([]byte(ret.String()))
+		} else {
+			w.Header().Set("Content-Type", route.ContentType)
 
-		// fmt.Printf("FROM REGISTERROUTES Handling request for route: %s\n", route.Route) // Log handling request
+			f, err := os.OpenFile(route.Content, os.O_RDONLY, os.ModePerm)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			defer f.Close()
 
-		f, err := os.OpenFile(route.Content, os.O_RDONLY, os.ModePerm)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			// fmt.Printf("FROM REGISTERROUTES Error opening file %s: %v\n", route.Content, err) // Log the error
-			return
-		}
-		defer f.Close()
-
-		_, err = io.Copy(w, f)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			// fmt.Printf("FROM REGISTERROUTES Error copying file %s: %v\n", route.Content, err) // Log the error
+			_, err = io.Copy(w, f)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
 		}
 	})
 }

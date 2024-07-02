@@ -3,7 +3,7 @@ package main
 import (
 	"Kserver/handlers"
 	"Kserver/internal"
-	"Kserver/luaIntegration"
+	"Kserver/luaintegration"
 	"flag"
 	"fmt"
 	"net/http"
@@ -54,9 +54,15 @@ func main() {
 	if *useLua {
 		l := lua.NewState(lua.Options{MinimizeStackMemory: true})
 		defer l.Close()
-		luaIntegration.RegisterRouteType(l)
-		l.SetGlobal("registerRoutes", l.NewFunction(luaIntegration.LuaRegisterRoutes))
-		l.SetGlobal("kserver_lua_file", lua.LString("kserver.lua"))
+		luaintegration.RegisterRouteType(l)
+		l.SetGlobal("registerRoutes", l.NewFunction(luaintegration.LuaRegisterRoutes))
+
+		// Create a temporary file to hold the Lua script
+		tempFile := luaintegration.CreateTempLUA()
+		defer os.Remove(tempFile.Name())
+
+		// Set the temporary file as the value of the kserver_lua_file global
+		l.SetGlobal("kserver_lua_file", lua.LString(tempFile.Name()))
 		if err := l.DoString("assert(loadfile(kserver_lua_file))()"); err != nil {
 			panic(err)
 		}

@@ -32,13 +32,20 @@ the file should look like this:
 
 ```lua copy
 local routes = {
+    -- It's important to keep the order of these parameteres otherwise the server will confuse them
     {route = "/", content = "./index.html", contentType = "text/html"},
     -- Add more routes here
 }
 
--- You don't have to make any changes here unless you need to process something before registering.
+Register_routes(routes)
+```
+
+If you need custom logic before registering you can add it before the call to Register_routes(routes) or replace it with this:
+
+```lua
+
 for i, r in ipairs(routes) do
-    local route = route.new(r.route, r.content, r.contentType)
+    local route = route.new(r.route, r.content, r.contentType, r.handler)
     if not route then
         error("Failed to create route")
     end
@@ -55,7 +62,7 @@ end
 ```
 
 >[!NOTE]
-> This lua code supports multiple routes and can be greatly simplified if you only intend on serving one route.
+> Register_routes and registerRoutes will show up as undefined as they are created at runtime when the server starts.
 
 ## Planned features
 

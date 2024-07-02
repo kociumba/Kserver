@@ -1,4 +1,4 @@
-package luaIntegration
+package luaintegration
 
 import (
 	"Kserver/handlers"
@@ -24,6 +24,13 @@ func newRoute(L *lua.LState) int {
 		Content:     L.CheckString(2),
 		ContentType: L.CheckString(3),
 	}
+
+	if route.ContentType == "application/json" {
+		if L.GetTop() == 4 {
+			route.LuaFunc = L.CheckFunction(4)
+		}
+	}
+
 	ud := L.NewUserData()
 	ud.Value = route
 	L.SetMetatable(ud, L.GetTypeMetatable(luaRouteTypeName))
@@ -70,6 +77,9 @@ func routeGetSetContentType(L *lua.LState) int {
 	r := checkRoute(L)
 	if L.GetTop() == 2 {
 		r.ContentType = L.CheckString(2)
+		if r.ContentType == "application/json" && L.GetTop() == 3 {
+			r.LuaFunc = L.CheckFunction(3)
+		}
 		return 0
 	}
 	L.Push(lua.LString(r.ContentType))
@@ -78,7 +88,11 @@ func routeGetSetContentType(L *lua.LState) int {
 
 func LuaRegisterRoutes(L *lua.LState) int {
 	route := checkRoute(L)
-	fmt.Printf("Registering route: \033[34m%+v\033[0m from LUA\n", route.Route)
+	if route.ContentType == "application/json" && route.LuaFunc != nil {
+		fmt.Printf("Registering JSON route: \033[34m%+v\033[0m from LUA\n", route.Route)
+	} else {
+		fmt.Printf("Registering route: \033[34m%+v\033[0m from LUA\n", route.Route)
+	}
 	handlers.RegisterRoutes(*route)
 	L.Push(lua.LBool(true)) // Return true to indicate success
 	return 1                // Number of return values

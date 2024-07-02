@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/ilyakaznacheev/cleanenv"
+	lua "github.com/yuin/gopher-lua"
 )
 
 type Handlers struct {
@@ -18,6 +19,7 @@ type Route struct {
 	Route       string `yaml:"route"`
 	Content     string `yaml:"content"`
 	ContentType string `yaml:"contentType"`
+	LuaFunc     *lua.LFunction
 }
 
 var Cfg Handlers
