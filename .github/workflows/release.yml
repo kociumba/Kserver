@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: kserver-${{ github.ref_name }}
-          path: bin/appname*
+          path: bin/kserver*
 
       - name: Release asset
         if: startsWith(github.ref, 'refs/tags/')
