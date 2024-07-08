@@ -3,12 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
-	"kserver/handlers"
-	"kserver/internal"
-	luainternal "kserver/luaintegration"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/kociumba/kserver/handlers"
+	"github.com/kociumba/kserver/internal"
+	"github.com/kociumba/kserver/luainternal"
 
 	"github.com/charmbracelet/log"
 	lua "github.com/yuin/gopher-lua"

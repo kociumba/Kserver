@@ -1,4 +1,4 @@
-module kserver
+module github.com/kociumba/kserver
 
 go 1.22.5
 

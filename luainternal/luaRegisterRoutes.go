@@ -2,7 +2,8 @@ package luainternal
 
 import (
 	"fmt"
-	"kserver/handlers"
+
+	"github.com/kociumba/kserver/handlers"
 
 	lua "github.com/yuin/gopher-lua"
 )
