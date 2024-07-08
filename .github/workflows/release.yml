@@ -30,7 +30,7 @@ jobs:
           trimpath: true
 
       - name: List directory
-        run: ls -al
+        run: ls -al bin
 
       - name: Upload artifact # Always upload an artifact for possible debugging
         uses: actions/upload-artifact@v4

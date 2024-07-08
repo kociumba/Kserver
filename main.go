@@ -1,11 +1,11 @@
 package main
 
 import (
-	"Kserver/handlers"
-	"Kserver/internal"
-	"Kserver/luaintegration"
 	"flag"
 	"fmt"
+	"kserver/handlers"
+	"kserver/internal"
+	"kserver/luaintegration"
 	"net/http"
 	"os"
 	"time"

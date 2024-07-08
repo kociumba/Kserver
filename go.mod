@@ -1,4 +1,4 @@
-module Kserver
+module kserver
 
 go 1.22.5
 

@@ -1,8 +1,8 @@
 package luaintegration
 
 import (
-	"Kserver/handlers"
 	"fmt"
+	"kserver/handlers"
 
 	lua "github.com/yuin/gopher-lua"
 )
