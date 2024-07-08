@@ -1,4 +1,4 @@
-package luaintegration
+package luainternal
 
 var Simplify = `
 function Register_routes(routes)

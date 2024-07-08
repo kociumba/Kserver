@@ -1,4 +1,4 @@
-package luaintegration
+package luainternal
 
 import (
 	"errors"

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"kserver/handlers"
 	"kserver/internal"
-	"kserver/luaintegration"
+	luainternal "kserver/luaintegration"
 	"net/http"
 	"os"
 	"time"
@@ -54,11 +54,11 @@ func main() {
 	if *useLua {
 		l := lua.NewState(lua.Options{MinimizeStackMemory: true})
 		defer l.Close()
-		luaintegration.RegisterRouteType(l)
-		l.SetGlobal("registerRoutes", l.NewFunction(luaintegration.LuaRegisterRoutes))
+		luainternal.RegisterRouteType(l)
+		l.SetGlobal("registerRoutes", l.NewFunction(luainternal.LuaRegisterRoutes))
 
 		// Create a temporary file to hold the Lua script
-		tempFile := luaintegration.CreateTempLUA()
+		tempFile := luainternal.CreateTempLUA()
 		defer os.Remove(tempFile.Name())
 
 		// Set the temporary file as the value of the kserver_lua_file global
